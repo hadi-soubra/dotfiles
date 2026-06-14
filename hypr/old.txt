@@ -1,0 +1,83 @@
+#!/bin/bash
+
+until hyprctl monitors > /dev/null 2>&1; do
+    sleep 0.5
+done
+
+hyprctl dispatch workspace 1
+until hyprctl activeworkspace | grep -q "workspace ID 1 "; do
+    sleep 0.1
+done
+
+until pactl info > /dev/null 2>&1; do
+    sleep 0.5
+done
+
+# Check workspace 1 has exactly the 4 apps and nothing else
+ws1_clients=$(hyprctl clients -j | jq '[.[] | select(.workspace.id == 1)]')
+ws1_count=$(echo "$ws1_clients" | jq 'length')
+
+all_open=true
+if [ "$ws1_count" -ne 4 ]; then
+    all_open=false
+else
+    for title in fetche clocke cavae matrixe; do
+        if ! echo "$ws1_clients" | jq -e --arg t "$title" '[.[] | select(.title == $t)] | length > 0' > /dev/null 2>&1; then
+            all_open=false
+            break
+        fi
+    done
+fi
+
+if [ "$all_open" = true ]; then
+    exit 0
+fi
+
+# Move extra (non-dashboard) windows on workspace 1 to workspace 2
+hyprctl clients -j | jq -r --argjson expected '["fetche","clocke","cavae","matrixe"]' \
+    '.[] | select(.workspace.id == 1) | select(.title as $t | ($expected | index($t)) == null) | .address' | \
+    while read -r addr; do
+        hyprctl dispatch movetoworkspacesilent 2,address:"$addr"
+    done
+
+sleep 0.3
+
+# Kill remaining dashboard windows on workspace 1
+hyprctl clients -j | jq -r '.[] | select(.workspace.id == 1) | .pid' | while read -r pid; do
+    kill -9 "$pid" 2>/dev/null
+done
+
+sleep 0.5
+
+#launch kitty
+kitty --title "fetche" &
+while ! hyprctl clients | grep -q "title: fetche"; do
+    sleep 0.1
+done
+
+
+#launch clock
+hyprctl dispatch layoutmsg preselect r
+kitty --title "clocke" -e tty-clock -c -r -C 7 &
+while ! hyprctl clients | grep -q "title: clocke"; do
+    sleep 0.1
+done
+
+
+#launch cava
+hyprctl dispatch layoutmsg preselect d
+kitty --title "cavae" -e cava &
+while ! hyprctl clients | grep -q "title: cavae"; do
+    sleep 0.1
+done
+hyprctl dispatch resizewindowpixel exact 930 600,title:cavae
+
+
+#launch matrix
+hyprctl dispatch focuswindow title:clocke
+hyprctl dispatch layoutmsg preselect r
+kitty --title "matrixe" -e cmatrix -C white &
+
+#focus terminal
+sleep 1
+hyprctl dispatch focuswindow title:fetche

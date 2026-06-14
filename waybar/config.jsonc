@@ -1,0 +1,141 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 44,
+
+    "modules-left": ["hyprland/workspaces", "custom/prev", "custom/play", "custom/next", "custom/claude-usage"],
+    "modules-center": ["clock"],
+    "modules-right": ["cpu", "memory", "custom/gpu1", "pulseaudio", "backlight", "custom/network", "custom/battery-prefix", "custom/battery", "custom/battery-nub", "custom/power-profile"],
+
+    "hyprland/workspaces": {
+        "format": "{icon}",
+        "format-icons": {
+            "1": "a",
+            "2": "b",
+            "3": "c",
+            "4": "d",
+            "5": "e",
+            "6": "f",
+            "7": "g",
+            "8": "h",
+            "9": "i",
+            "10": "j",
+            "default": "a"
+        },
+        "on-click": "activate"
+    },
+
+    "clock": {
+        "format": "{:%a %d %b  %H:%M:%S}",
+        "interval": 1,
+        "tooltip": false
+    },
+
+    "custom/prev": {
+        "exec": "if pgrep -x spotify > /dev/null; then echo '{\"text\": \"[⏮︎]\"}'; else echo '{\"text\": \"\", \"class\": \"hidden\"}'; fi",
+        "return-type": "json",
+        "format": "{}",
+        "interval": 2,
+        "on-click": "playerctl -p spotify previous",
+        "tooltip": false
+    },
+
+    "custom/play": {
+        "exec": "if ! pgrep -x spotify > /dev/null; then echo '{\"text\": \"Spotify\", \"class\": \"standalone\"}'; else meta=$(playerctl -p spotify metadata --format '{{artist}} - {{title}}' 2>/dev/null); if [ -n \"$meta\" ]; then echo \"{\\\"text\\\": \\\"$meta\\\"}\"; else echo '{\"text\": \"Spotify\"}'; fi; fi",
+        "return-type": "json",
+        "format": "{}",
+        "interval": 2,
+        "on-click": "playerctl -p spotify play-pause 2>/dev/null || spotify &",
+        "tooltip": false
+    },
+
+    "custom/next": {
+        "exec": "if pgrep -x spotify > /dev/null; then echo '{\"text\": \"[⏭︎]\"}'; else echo '{\"text\": \"\", \"class\": \"hidden\"}'; fi",
+        "return-type": "json",
+        "format": "{}",
+        "interval": 2,
+        "on-click": "playerctl -p spotify next",
+        "tooltip": false
+    },
+
+    "cpu": {
+        "format": "[{usage}%]",
+        "interval": 1,
+        "tooltip": false
+    },
+
+    "memory": {
+        "format": "[{used:0.1f}G]",
+        "interval": 1,
+        "tooltip": false
+    },
+
+    "custom/gpu1": {
+        "exec": "nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits | tr -d ' '",
+        "format": "[{}%]",
+        "interval": 1,
+        "tooltip": false
+    },
+
+    "pulseaudio": {
+        "format": "[{volume}%]",
+        "on-scroll-down": "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 1%+",
+        "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%-",
+        "on-click": "kitty --title wiremix wiremix --theme nocolor",
+        "tooltip": false
+    },
+
+    "backlight": {
+        "format": "[{percent}%]",
+        "on-scroll-down": "brightnessctl set 1%+",
+        "on-scroll-up": "brightnessctl set 1%- ; val=$(brightnessctl get); max=$(brightnessctl max); [ $((val*100/max)) -lt 5 ] && brightnessctl set 5%",
+        "on-click": "kitty --title hyprmon hyprmon",
+        "tooltip": false
+    },
+
+    "custom/network": {
+        "format": "{}",
+        "exec": "bash -c 'result=$(nmcli -t -f active,signal,ssid dev wifi | grep \"^yes\"); if [ -z \"$result\" ]; then echo \"disconnected\"; else echo \"$result\" | awk -F: \"{s=\\$2; if(s>80) icon=\\\"▂▄▆█\\\"; else if(s>50) icon=\\\"▂▄▆_\\\"; else if(s>20) icon=\\\"▂▄__\\\"; else if(s>0) icon=\\\"▂___\\\"; printf \\\"%s %s\\\\n\\\", icon, \\$3}\"; fi'",        
+        "interval": 1,
+        "on-click": "kitty --title nmtui nmtui",
+        "tooltip": false
+    },
+
+    "custom/battery-prefix": {
+        "exec": "~/.config/waybar/scripts/battery-prefix.sh",
+        "format": "{}",
+        "return-type": "json",
+        "interval": 1,
+        "tooltip": true
+    },
+
+    "custom/battery": {
+        "exec": "~/.config/waybar/scripts/battery.sh",
+        "format": "{}",
+        "return-type": "json",
+        "interval": 1,
+        "tooltip": true
+    },
+    
+    "custom/battery-nub": {
+        "format": "┃■",
+        "interval": "once"
+    },
+
+    "custom/claude-usage": {
+        "exec": "python3 ~/.config/waybar/scripts/claude-usage.py",
+        "return-type": "json",
+        "format": "{}",
+        "interval": 0,
+        "signal": 8,
+        "tooltip": true
+    },
+
+    "custom/power-profile": {
+        "exec": "current=$(powerprofilesctl get); if [ \"$current\" = \"performance\" ]; then echo '●'; elif [ \"$current\" = \"balanced\" ]; then echo '◕'; else echo '◔'; fi",
+        "format": "{}",
+        "interval": 1,
+        "on-click": "sh -c 'current=$(powerprofilesctl get); if [ \"$current\" = \"performance\" ]; then powerprofilesctl set  power-saver; elif [ \"$current\" = \"balanced\" ]; then powerprofilesctl set performance; else powerprofilesctl set balanced; fi'",
+        "tooltip": false
+    }
+}

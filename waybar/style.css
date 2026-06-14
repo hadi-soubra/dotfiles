@@ -1,0 +1,168 @@
+* {
+    font-family: "JetBrains Mono", "Noto Color Emoji";
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: 4px;
+}
+
+window#waybar,
+window#waybar > box,
+window#waybar > box > box {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+/* ── Workspaces ── */
+#workspaces { background-color: transparent; margin: 0; padding: 0; }
+
+#workspaces button {
+    background-color: #ffffff;
+    margin: 0 4px;
+    transition: none;
+    animation: none;
+    border-radius: 0;
+}
+
+#workspaces button * {
+    margin: 0;
+    font-family: "Waybar WS";
+    font-weight: normal;
+    font-size: 20px;
+    color: #000000;
+    background-color: #ffffff;
+    box-shadow: none;
+    text-shadow: none;
+    transition: none;
+}
+
+#workspaces button.active {
+    background-color: #ffffff;
+    background-image: linear-gradient(#000000, #000000);
+    background-repeat: no-repeat;
+    background-size: calc(100% - 8px) calc(100% - 8px);
+    background-position: center;
+}
+
+#workspaces button.active * { color: #ffffff; background-color: transparent; }
+
+/* ── Modules ── */
+#clock, #custom-prev, #custom-play, #custom-next,
+#cpu, #memory, #custom-gpu1, #custom-claude-usage, #pulseaudio,
+#backlight, #custom-network, #custom-battery-prefix, #custom-battery, #custom-battery-nub, #custom-power-profile {
+    background-color: #ffffff;
+    color: #000000;
+    padding: 4px 8px;
+    margin: 0;
+}
+
+#memory { padding: 4px 0; }
+
+#cpu, #custom-battery-prefix { margin-left: 4px; }
+#custom-battery-prefix { padding-right: 0; padding-left: 10px; }
+#custom-battery-prefix.discharging-normal { padding: 0; margin: 0; min-width: 0; }
+#custom-battery-prefix.charging {
+    padding-left: 0px;
+    min-width: 29px;
+    color: transparent;
+    background-image: url("/home/hadi/.config/waybar/icons/charging.svg");
+    background-repeat: no-repeat;
+    background-size: 22px 22px;
+    background-position: 8px center;
+}
+#custom-battery.no-prefix { margin-left: 4px; }
+#pulseaudio { margin-left: 4px; padding-right: 4px; }
+
+#custom-gpu1 { margin-right: 4px; }
+
+#cpu {
+    padding-left: 28px;
+    padding-right: 0px;
+    background-image: url("/home/hadi/.config/waybar/icons/cpu.svg");
+    background-repeat: no-repeat;
+    background-size: 18px 18px;
+    background-position: 6px center;
+}
+
+#memory {
+    padding: 0px 0px 0px 28px;
+    background-image: url("/home/hadi/.config/waybar/icons/ram.svg");
+    background-repeat: no-repeat;
+    background-size: 18px 18px;
+    background-position: 6px center;
+}
+
+#custom-gpu1 {
+    padding-left: 28px;
+    background-image: url("/home/hadi/.config/waybar/icons/gpu.svg");
+    background-repeat: no-repeat;
+    background-size: 18px 18px;
+    background-position: 6px center;
+}
+
+#pulseaudio {
+    padding-left: 28px;
+    background-image: url("/home/hadi/.config/waybar/icons/volume.svg");
+    background-repeat: no-repeat;
+    background-size: 18px 18px;
+    background-position: 6px center;
+}
+
+#backlight {
+    margin-right: 4px;
+    padding-left: 28px;
+    background-image: url("/home/hadi/.config/waybar/icons/brightness.svg");
+    background-repeat: no-repeat;
+    background-size: 18px 18px;
+    background-position: 6px center;
+}
+
+#custom-claude-usage {
+    margin-left: 4px;
+    padding-left: 28px;
+    background-image: url("/home/hadi/.config/waybar/icons/claude.svg");
+    background-repeat: no-repeat;
+    background-size: 18px 18px;
+    background-position: 6px center;
+}
+#custom-claude-usage.inactive { color: #999999; }
+
+#custom-play {
+    padding: 8px 8px 8px 28px;
+    margin: 0;
+    background-image: url("/home/hadi/.config/waybar/icons/spotify.svg");
+    background-repeat: no-repeat;
+    background-size: 18px 18px;
+    background-position: 6px center;
+}
+#custom-prev{margin: 0; padding-right: 0;margin-left:4px ;}
+#custom-next{margin: 0;padding-left: 0;} 
+
+#clock, #custom-network { margin: 0 4px; }
+
+#custom-power-profile {padding: 0; margin-right: 4px; padding-right: 8px;}
+#custom-battery { padding: 0; }
+#custom-battery{
+    background-image: linear-gradient(#000000, #000000), linear-gradient(#000000, #000000);
+    background-repeat: no-repeat, no-repeat;
+    background-size: 92% 3px, 92% 3px;
+    background-position: calc(50% + 6px) 5px, calc(50% + 6px) calc(100% - 5px);
+}
+#custom-battery-nub{
+    background-image: linear-gradient(#000000, #000000), linear-gradient(#000000, #000000);
+    background-repeat: no-repeat, no-repeat;
+    background-size: 30% 3px, 30% 3px;
+    background-position: calc(50% - 8px) 5px, calc(50% - 8px) calc(100% - 5px);
+}
+
+#custom-battery { padding-left: 8px; padding-right: 0; margin-left: 0;}
+#custom-battery-nub { padding-left: 0; letter-spacing: -4px; }
+
+/* hidden spotify controls collapse to nothing */
+#custom-prev.hidden, #custom-next.hidden {
+    padding: 0;
+    margin: 0;
+    min-width: 0;
+    background-color: transparent;
+}
+
+#custom-play.standalone { margin: 0 4px; }
+

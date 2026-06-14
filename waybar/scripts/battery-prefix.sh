@@ -13,12 +13,12 @@ if [ "$STATUS" = "Charging" ]; then
         echo "Charging" > "$STATE_FILE"
     fi
 
-elif [ "$STATUS" = "Full" ]; then
-    PREFIX="100%"
-    if [[ "$LAST_STATUS" != "Charging" && "$LAST_STATUS" != "Full" ]]; then
-        powerprofilesctl set performance
-        echo "Charging" > "$STATE_FILE"
-    fi
+#!elif [ "$STATUS" = "Full" ]; then
+#!    PREFIX="100%"
+#!    if [[ "$LAST_STATUS" != "Charging" && "$LAST_STATUS" != "Full" ]]; then
+#!        powerprofilesctl set performance
+#!        echo "Charging" > "$STATE_FILE"
+#!    fi
 
 elif [ "$STATUS" = "Discharging" ]; then
     if [ "$LAST_STATUS" != "Discharging" ]; then

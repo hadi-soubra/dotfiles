@@ -21,10 +21,11 @@ from fontTools.fontBuilder import FontBuilder
 from fontTools.pens.ttGlyphPen import TTGlyphPen
 
 UPM = 1000
-H = 680            # glyph (cap) height, sits on baseline y=0
+H = 400         # stroke height, sits on baseline y=0 (shorter character;
+                   # H+2*BAR_T = 900 -> 18px at 20px font -> even 9/9 gaps)
 T = 120            # stroke thickness
-BAR_T = 160        # thickness of the top & bottom bars
-OVERHANG = 45      # how far the bars extend past the outer strokes (each side)
+BAR_T = 120        # thickness of the top & bottom bars
+OVERHANG = 100     # how far the bars extend past the outer strokes (each side)
 GAP = 70           # gap between sub-strokes in a composite numeral
 SIDE = 90          # left/right side bearing (around actual ink)
 Y_SHIFT = 0        # vertical offset in em (0 = centered for our metrics)
@@ -32,8 +33,8 @@ Y_SHIFT = 0        # vertical offset in em (0 = centered for our metrics)
 # Sub-glyph cell widths.  V/X are WIDE so the diagonals open up (more angle =
 # more empty space between the arms = stays readable under the bars).
 W_I = 120          # == T, so I strokes pack tightly under a shared bar
-W_V = 600
-W_X = 600
+W_V = 440          # ~0.9*H: keeps the diagonal angle readable at this height
+W_X = 440          # (too wide vs H -> the X flattens into an hourglass)
 EDGE = 70          # inset of diagonal stroke ends from the cell edge
 
 

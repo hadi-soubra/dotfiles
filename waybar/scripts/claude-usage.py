@@ -10,7 +10,7 @@ CF_COOKIES = {"cf_clearance", "anthropic-device-id", "__cf_bm", "__ssid"}
 
 
 def inactive(msg):
-    print(json.dumps({"text": "ℭ[–]", "tooltip": msg, "class": "inactive"}))
+    print(json.dumps({"text": "Loading...", "tooltip": msg, "class": "inactive"}))
     sys.exit(0)
 
 

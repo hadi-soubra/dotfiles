@@ -24,7 +24,9 @@ window#waybar > box > box {
 
 #workspaces button * {
     margin: 0;
-    font-family: "Waybar WS";
+    /* Waybar WS holds the Roman glyphs a-j (ws 1-10); anything else (ws 11+
+       falls back to its {name}, e.g. "11") renders from JetBrains Mono. */
+    font-family: "Waybar WS", "JetBrains Mono";
     font-weight: normal;
     font-size: 20px;
     color: #000000;
